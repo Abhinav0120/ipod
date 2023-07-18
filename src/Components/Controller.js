@@ -15,6 +15,7 @@ const Wheel = styled.div`
     display: flex;
     justify-content:center;
     align-items: center;
+    position: relative;
 `
 const CenterButton = styled.div`
     width: 100px;
@@ -23,14 +24,52 @@ const CenterButton = styled.div`
     border-radius: 50%;
 `
 
+const PreviousButton = styled.img`
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 20px;
+`
+const NextButton = styled.img`
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 190px;
+`
+
+const PlayPauseButton = styled.img`
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 100px;
+    top: 190px;   
+`
+
+const MenuOption = styled.span`
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.3rem;
+    position: absolute;
+    left: 92px;
+    top: 20px;    
+
+`
+
 const Controller = ()=>{
     return(
         <ControllerContainer>
             <Wheel>
-                {/* Wheel */}
+                <PreviousButton src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
+
+                <MenuOption>Menu</MenuOption>
+
                 <CenterButton>
-                    
                 </CenterButton>
+
+                <NextButton src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
+
+                <PlayPauseButton src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
+
             </Wheel>
         </ControllerContainer>
     )
