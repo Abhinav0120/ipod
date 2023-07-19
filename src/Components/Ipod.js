@@ -9,10 +9,11 @@ const IpodContainer = styled.div`
     border-radius: 20px;
     overflow: hidden;
 `;
-const Ipod = ()=>{
+const Ipod = (props)=>{
+    const {menu} = props;
     return (
         <IpodContainer>
-            <Screen/>
+            <Screen menu = {menu}/>
             <Controller/>
         </IpodContainer>
     )
