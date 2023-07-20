@@ -1,4 +1,5 @@
 import styled from "styled-components";
+// import ZingTouch from 'zingtouch';
 
 const ControllerContainer = styled.div`
     height: 50%;
@@ -55,20 +56,21 @@ const MenuOption = styled.span`
 
 `
 
-const Controller = ()=>{
+const Controller = (props)=>{
+    const {wheelRef} = props;
     return(
         <ControllerContainer>
-            <Wheel>
-                <PreviousButton src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
+            <Wheel ref={wheelRef} draggable="false">
+                <PreviousButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
 
-                <MenuOption>Menu</MenuOption>
+                <MenuOption draggable="false" >Menu</MenuOption>
 
-                <CenterButton>
+                <CenterButton onClick={(e) => e.stopPropagation()} draggable="false">
                 </CenterButton>
 
-                <NextButton src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
+                <NextButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
 
-                <PlayPauseButton src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
+                <PlayPauseButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
 
             </Wheel>
         </ControllerContainer>

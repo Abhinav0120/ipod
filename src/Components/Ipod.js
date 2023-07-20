@@ -10,11 +10,11 @@ const IpodContainer = styled.div`
     overflow: hidden;
 `;
 const Ipod = (props)=>{
-    const {menu} = props;
+    const {menu, activeMenuItem, wheelRef} = props;
     return (
         <IpodContainer>
             <Screen menu = {menu}/>
-            <Controller/>
+            <Controller wheelRef={wheelRef}/>
         </IpodContainer>
     )
 }
