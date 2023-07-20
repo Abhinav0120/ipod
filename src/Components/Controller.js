@@ -7,6 +7,7 @@ const ControllerContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 `
 const Wheel = styled.div`
     width: 250px;
@@ -23,6 +24,8 @@ const CenterButton = styled.div`
     height: 100px;
     background-color: grey;
     border-radius: 50%;
+    position: absolute;
+    left: 36%;
 `
 
 const PreviousButton = styled.img`
@@ -55,24 +58,30 @@ const MenuOption = styled.span`
     top: 20px;    
 
 `
+const handleCenterButtonClick = (e) => {
+    e.stopPropagation(); // Prevent the event from propagating to parent (Wheel)
+    // if (onCenterButtonClick) {
+    //   onCenterButtonClick(); // Call the provided click event handler for the CenterButton
+    // }
+  };
 
 const Controller = (props)=>{
     const {wheelRef} = props;
     return(
-        <ControllerContainer>
+        <ControllerContainer draggable="false">
             <Wheel ref={wheelRef} draggable="false">
                 <PreviousButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
 
                 <MenuOption draggable="false" >Menu</MenuOption>
 
-                <CenterButton onClick={(e) => e.stopPropagation()} draggable="false">
-                </CenterButton>
+                {/* <CenterButton onClick={handleCenterButtonClick} /> */}
 
                 <NextButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
 
                 <PlayPauseButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
 
             </Wheel>
+            <CenterButton onClick={handleCenterButtonClick} draggable="false"/>
         </ControllerContainer>
     )
 }
