@@ -58,15 +58,15 @@ const MenuOption = styled.span`
     top: 20px;    
 
 `
-const handleCenterButtonClick = (e) => {
-    e.stopPropagation(); // Prevent the event from propagating to parent (Wheel)
-    // if (onCenterButtonClick) {
-    //   onCenterButtonClick(); // Call the provided click event handler for the CenterButton
-    // }
-  };
+// const handleCenterButtonClick = (e) => {
+//     e.stopPropagation(); // Prevent the event from propagating to parent (Wheel)
+//     // if (onCenterButtonClick) {
+//     //   onCenterButtonClick(); // Call the provided click event handler for the CenterButton
+//     // }
+//   };
 
 const Controller = (props)=>{
-    const {wheelRef} = props;
+    const {wheelRef, changeMenu} = props;
     return(
         <ControllerContainer draggable="false">
             <Wheel ref={wheelRef} draggable="false">
@@ -81,7 +81,11 @@ const Controller = (props)=>{
                 <PlayPauseButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
 
             </Wheel>
-            <CenterButton onClick={handleCenterButtonClick} draggable="false"/>
+            <CenterButton onClick={(e)=>{ 
+                                            e.stopPropagation();
+                                            changeMenu();
+                                        }
+                                    } draggable="false"/>
         </ControllerContainer>
     )
 }

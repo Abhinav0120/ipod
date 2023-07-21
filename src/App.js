@@ -10,7 +10,7 @@ class App extends React.Component {
 
       this.state ={
         menu :{
-          menuOptions:[
+          options:[
             {
               id: 1,
               title: "Cover Flow",
@@ -27,7 +27,7 @@ class App extends React.Component {
                   id: 1,
                   title:"All Songs",
                   options: [],
-                  isSelected: false,
+                  isSelected: true,
                   isVisible: false,
                 },
                 {
@@ -67,13 +67,31 @@ class App extends React.Component {
             }
           ],
 
-          isVisible: true,
+          isVisible: false,
         },
         activeMenuItem: 0,
+        menuNo: 0,
+        visibleOptions: [],
+        visibleMenu: null,
       }
 
       this.wheelRef = React.createRef();
 
+  }
+
+  changeMenu = () =>{
+    const {menu, visibleOptions } = this.state;
+    const { options } = menu;
+    
+    if(visibleOptions.length === 0){
+      this.setState({visibleOptions:options, menuNo:this.state.menuNo+1});
+    }else{
+      const selectedOptions = visibleOptions.filter((options, index) => index === this.state.activeMenuItem);
+      console.log(selectedOptions);
+      const newVisibleOptions = selectedOptions[0].options;
+      
+      this.setState({visibleOptions:newVisibleOptions, menuNo:this.state.menuNo+1});
+    }
   }
 
   componentDidMount() {
@@ -114,50 +132,60 @@ class App extends React.Component {
 
   handleRotateClockwise() {
     const { activeMenuItem } = this.state;
-    const { menuOptions } = this.state.menu;
+    const options = this.state.visibleOptions;
+    if(options.length === 0){
+      return;
+    }
 
     // Calculate the next active menu item index (clockwise)
-    let nextActiveItem = (activeMenuItem + 1) % menuOptions.length;
+    let nextActiveItem = (activeMenuItem + 1) % options.length;
 
     this.setState({ activeMenuItem: nextActiveItem });
 
-    // Update isSelected for the menuOptions
-    const updatedMenuOptions = menuOptions.map((option, index) => ({
+    // Update isSelected for the options
+    const updatedoptions = options.map((option, index) => ({
       ...option,
       isSelected: index === nextActiveItem,
     }));
 
-    // Update the menu state with the new menuOptions
-    this.setState((prevState) => ({
-      menu: {
-        ...prevState.menu,
-        menuOptions: updatedMenuOptions,
-      },
-    }));
+    // Update the menu state with the new options
+    // this.setState((prevState) => ({
+    //   menu: {
+    //     ...prevState.menu,
+    //     options: updatedoptions,
+    //   },
+    //   visibleOptions : updatedoptions,
+    // }));
+
+    this.setState({visibleOptions:updatedoptions});
   }
 
   handleRotateCounterclockwise() {
     const { activeMenuItem } = this.state;
-    const { menuOptions } = this.state.menu;
-
+    const options = this.state.visibleOptions;
+    if(options.length === 0){
+      return;
+    }
     // Calculate the next active menu item index (counterclockwise)
-    let nextActiveItem = (activeMenuItem - 1 + menuOptions.length) % menuOptions.length;
+    let nextActiveItem = (activeMenuItem - 1 + options.length) % options.length;
 
     this.setState({ activeMenuItem: nextActiveItem });
 
-    // Update isSelected for the menuOptions
-    const updatedMenuOptions = menuOptions.map((option, index) => ({
+    // Update isSelected for the options
+    const updatedoptions = options.map((option, index) => ({
       ...option,
       isSelected: index === nextActiveItem,
     }));
 
-    // Update the menu state with the new menuOptions
-    this.setState((prevState) => ({
-      menu: {
-        ...prevState.menu,
-        menuOptions: updatedMenuOptions,
-      },
-    }));
+    // Update the menu state with the new options
+    // this.setState((prevState) => ({
+    //   menu: {
+    //     ...prevState.menu,
+    //     options: updatedoptions,
+    //   },
+    // }));
+    this.setState({visibleOptions:updatedoptions});
+
   }
 
   cleanupRotateGesture() {
@@ -169,11 +197,15 @@ class App extends React.Component {
   }
 
   render(){
-    const {menu, activeMenuItem} = this.state;
-    console.log(activeMenuItem);
+    const {menu, activeMenuItem, visibleOptions} = this.state;
+    // console.log(activeMenuItem);
     return (
       <div className="App">
-        <Ipod menu={menu} activeMenuItem={activeMenuItem} wheelRef={this.wheelRef}/>
+        <Ipod menu={menu} 
+              activeMenuItem={activeMenuItem} 
+              wheelRef={this.wheelRef} 
+              changeMenu={this.changeMenu}
+              visibleOptions = {visibleOptions}/>
       </div>
     );
   }

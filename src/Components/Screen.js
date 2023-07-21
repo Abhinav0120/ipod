@@ -41,27 +41,22 @@ const MenuOption2  = styled.div`
     border-radius: 5px;
 `
 const Screen = (props)=>{
-    const {menu} = props;
-    const {menuOptions , isVisible} = menu;
-    console.log(menuOptions,isVisible);
+    const {menu, visibleOptions} = props;
+    const {options , isVisible} = menu;
     return(
         <ScreenContainer>
-            {
-                isVisible? <Menu>
-                <MenuHeader>Menu</MenuHeader>
-                    {menuOptions.map((options)=>{
-                        return (
-                            options.isSelected ? <MenuOption2 key={options.id}>{options.title}</MenuOption2>
-                            :
-                            <MenuOption1 key={options.id}>{options.title}</MenuOption1>
-                        )
-                    })}
-                    {/* <MenuOptions>CoverFlow</MenuOptions>
-                    <MenuOptions>Music</MenuOptions>
-                    <MenuOptions>Games</MenuOptions>
-                    <MenuOptions>Setting</MenuOptions> */}
-                </Menu>: null
-            }
+        {
+            visibleOptions.length !== 0? <Menu>
+            <MenuHeader>Menu</MenuHeader>
+                {visibleOptions.map((option)=>{
+                    return (
+                        option.isSelected ? <MenuOption2 key={option.id}>{option.title}</MenuOption2>
+                        :
+                        <MenuOption1 key={option.id}>{option.title}</MenuOption1>
+                    )
+                })}
+            </Menu>: null
+        }
         </ScreenContainer>
     );
 }
