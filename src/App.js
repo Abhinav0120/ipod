@@ -71,8 +71,8 @@ class App extends React.Component {
         },
         activeMenuItem: 0,
         menuNo: 0,
-        visibleOptions: [],
-        visibleMenu: null,
+        visibleMenu:null,
+        menuHistory: [],
       }
 
       this.wheelRef = React.createRef();
@@ -80,17 +80,16 @@ class App extends React.Component {
   }
 
   changeMenu = () =>{
-    const {menu, visibleOptions } = this.state;
-    const { options } = menu;
+   
+    const {menu, visibleMenu, menuHistory } = this.state;
     
-    if(visibleOptions.length === 0){
-      this.setState({visibleOptions:options, menuNo:this.state.menuNo+1});
+    if(menuHistory.length === 0){
+      this.setState({visibleMenu: menu,menuHistory:[...menuHistory, menu]})
     }else{
-      const selectedOptions = visibleOptions.filter((options, index) => index === this.state.activeMenuItem);
-      console.log(selectedOptions);
-      const newVisibleOptions = selectedOptions[0].options;
-      
-      this.setState({visibleOptions:newVisibleOptions, menuNo:this.state.menuNo+1});
+      const newVisibleMenuArray = visibleMenu.options.filter((options, index) => index === this.state.activeMenuItem);
+      const newVisibleMenu = newVisibleMenuArray[0];
+      console.log(newVisibleMenu);
+      this.setState({visibleMenu:newVisibleMenu, menuHistory: [...menuHistory, newVisibleMenu]});
     }
   }
 
@@ -132,11 +131,11 @@ class App extends React.Component {
 
   handleRotateClockwise() {
     const { activeMenuItem } = this.state;
-    const options = this.state.visibleOptions;
+    const options = this.state.visibleMenu.options;
     if(options.length === 0){
       return;
     }
-
+    
     // Calculate the next active menu item index (clockwise)
     let nextActiveItem = (activeMenuItem + 1) % options.length;
 
@@ -149,20 +148,20 @@ class App extends React.Component {
     }));
 
     // Update the menu state with the new options
-    // this.setState((prevState) => ({
-    //   menu: {
-    //     ...prevState.menu,
-    //     options: updatedoptions,
-    //   },
-    //   visibleOptions : updatedoptions,
-    // }));
+    this.setState((prevState) => ({
+      visibleMenu: {
+        ...prevState.visibleMenu,
+        options: updatedoptions,
+      },
+      // visibleOptions : updatedoptions,
+    }));
 
-    this.setState({visibleOptions:updatedoptions});
+    // this.setState({visibleOptions:updatedoptions});
   }
 
   handleRotateCounterclockwise() {
     const { activeMenuItem } = this.state;
-    const options = this.state.visibleOptions;
+    const options = this.state.visibleMenu.options;
     if(options.length === 0){
       return;
     }
@@ -178,13 +177,13 @@ class App extends React.Component {
     }));
 
     // Update the menu state with the new options
-    // this.setState((prevState) => ({
-    //   menu: {
-    //     ...prevState.menu,
-    //     options: updatedoptions,
-    //   },
-    // }));
-    this.setState({visibleOptions:updatedoptions});
+    this.setState((prevState) => ({
+      visibleMenu: {
+        ...prevState.visibleMenu,
+        options: updatedoptions,
+      },
+    }));
+    // this.setState({visibleOptions:updatedoptions});
 
   }
 
@@ -197,7 +196,7 @@ class App extends React.Component {
   }
 
   render(){
-    const {menu, activeMenuItem, visibleOptions} = this.state;
+    const {menu, activeMenuItem, visibleMenu} = this.state;
     // console.log(activeMenuItem);
     return (
       <div className="App">
@@ -205,7 +204,7 @@ class App extends React.Component {
               activeMenuItem={activeMenuItem} 
               wheelRef={this.wheelRef} 
               changeMenu={this.changeMenu}
-              visibleOptions = {visibleOptions}/>
+              visibleMenu = {visibleMenu}/>
       </div>
     );
   }

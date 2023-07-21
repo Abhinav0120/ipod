@@ -56,7 +56,6 @@ const MenuOption = styled.span`
     position: absolute;
     left: 92px;
     top: 20px;    
-
 `
 // const handleCenterButtonClick = (e) => {
 //     e.stopPropagation(); // Prevent the event from propagating to parent (Wheel)
@@ -73,8 +72,6 @@ const Controller = (props)=>{
                 <PreviousButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
 
                 <MenuOption draggable="false" >Menu</MenuOption>
-
-                {/* <CenterButton onClick={handleCenterButtonClick} /> */}
 
                 <NextButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
 
