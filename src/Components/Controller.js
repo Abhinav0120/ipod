@@ -65,17 +65,23 @@ const MenuOption = styled.span`
 //   };
 
 const Controller = (props)=>{
-    const {wheelRef, changeMenu} = props;
+    const {wheelRef, changeMenu, playPauseSong, showMenu} = props;
     return(
         <ControllerContainer draggable="false">
             <Wheel ref={wheelRef} draggable="false">
                 <PreviousButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
 
-                <MenuOption draggable="false" >Menu</MenuOption>
+                <MenuOption draggable="false"  onClick={(e)=>{
+                    e.stopPropagation();
+                    showMenu();
+                }}>Menu</MenuOption>
 
                 <NextButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
 
-                <PlayPauseButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
+                <PlayPauseButton onClick={(e)=>{
+                    e.stopPropagation();
+                    playPauseSong();
+                }} draggable="false" src="https://cdn-icons-png.flaticon.com/128/8191/8191650.png" placeholder="Pause Play button" role="img" />
 
             </Wheel>
             <CenterButton onClick={(e)=>{ 

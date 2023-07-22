@@ -2,14 +2,16 @@ import './App.css';
 import React from "react";
 import Ipod from "./Components/Ipod";
 import ZingTouch from 'zingtouch';
+import songs from './assets/songs/songs';
+import thumbnails from './assets/thumbnails/thumbnails';
 
 
 class App extends React.Component {
   constructor(){
       super();
-
       this.state ={
         menu :{
+          title: "Menu",
           options:[
             {
               id: 1,
@@ -17,7 +19,8 @@ class App extends React.Component {
               options: [],
               // isActive:false,
               isSelected: true,
-              isVisible: false
+              isVisible: false,
+              status: "This Feature is under development!",
             },
             {
               id: 2,
@@ -26,9 +29,42 @@ class App extends React.Component {
                 {
                   id: 1,
                   title:"All Songs",
-                  options: [],
+                  options: [
+                    {
+                      id: 1,
+                      type: "song",
+                      title:"Justice",
+                      thumbnail: thumbnails.thumbnail1,
+                      singer:"Justin Bieber",
+                      song: new Audio(songs.song1),
+                      isSelected: false,
+                      isVisible: false,
+                    },
+                    {
+                      id: 2,
+                      type: "song",
+                      title:"Lovely",
+                      thumbnail: thumbnails.thumbnail2,
+                      singer:"Billie Eilish",
+                      song: new Audio(songs.song1),
+                      isSelected: false,
+                      isVisible: false,
+                    },
+                    {
+                      id: 3,
+                      type: "song",
+                      title:"Perfect",
+                      thumbnail: thumbnails.thumbnail3,
+                      singer:"Ed Sheeran",
+                      song: new Audio(songs.song1),
+                      isSelected: false,
+                      isVisible: false,
+                    }
+                  ],
                   isSelected: true,
                   isVisible: false,
+                  status: "This Feature is under Development..!",
+
                 },
                 {
                   id: 2,
@@ -36,6 +72,7 @@ class App extends React.Component {
                   options: [],
                   isSelected: false,
                   isVisible: false,
+                  status: "This Feature is under Development..!",
                 },
                 {
                   id: 3,
@@ -43,6 +80,7 @@ class App extends React.Component {
                   options: [],
                   isSelected: false,
                   isVisible: false,
+                  status: "This Feature is under Development..!",
                 }
               ],
               // isActive:false,
@@ -55,7 +93,8 @@ class App extends React.Component {
               options: [],
               // isActive:false,
               isSelected:false,
-              isVisible: false
+              isVisible: false,
+              status: "This Feature is under Development..!",
             },
             {
               id: 4,
@@ -63,7 +102,8 @@ class App extends React.Component {
               options: [],
               // isActive:false,
               isSelected:false,
-              isVisible: false
+              isVisible: false,
+              status: "This Feature is under Development..!",
             }
           ],
 
@@ -73,25 +113,74 @@ class App extends React.Component {
         menuNo: 0,
         visibleMenu:null,
         menuHistory: [],
+        isPlaying: false,
+        currentSong:null,
       }
-
       this.wheelRef = React.createRef();
-
   }
 
   changeMenu = () =>{
-   
     const {menu, visibleMenu, menuHistory } = this.state;
-    
     if(menuHistory.length === 0){
       this.setState({visibleMenu: menu,menuHistory:[...menuHistory, menu]})
-    }else{
+    }else if(visibleMenu.options!=null && visibleMenu.options.length !== 0){
       const newVisibleMenuArray = visibleMenu.options.filter((options, index) => index === this.state.activeMenuItem);
       const newVisibleMenu = newVisibleMenuArray[0];
       console.log(newVisibleMenu);
-      this.setState({visibleMenu:newVisibleMenu, menuHistory: [...menuHistory, newVisibleMenu]});
+      this.setState({visibleMenu:newVisibleMenu, menuHistory: [...menuHistory, newVisibleMenu], activeMenuItem:0});
+      console.log(this.state.activeMenuItem);
     }
   }
+
+  showMenu = () =>{
+    const {menu, menuHistory, currentSong, isPlaying } = this.state;
+
+    if(menuHistory.length === 0){
+      this.setState({visibleMenu: menu,menuHistory:[...menuHistory, menu]})
+    }else if (menuHistory.length >= 1) {
+      
+      menuHistory.pop(); // Remove the current menu from the history
+  
+      // Get the previous menu from the history
+      const prevMenu = menuHistory[menuHistory.length - 1];
+
+      if(isPlaying && currentSong !== null){
+        currentSong.pause();
+
+      }
+  
+      // Update the state with the new activeMenuItem and visibleMenu
+      this.setState({
+        activeMenuItem: 0, // Reset to the first menu item when going back to a submenu
+        visibleMenu: prevMenu,
+        menuHistory: [...menuHistory], // Update the menu history (without mutating the original array)
+        isPlaying: false,
+      });
+    }
+
+  }
+
+  playPauseSong = (song) =>{
+
+    const {visibleMenu, isPlaying, currentSong} = this.state;
+
+    if(visibleMenu!= null){
+      if(visibleMenu.type!=null && visibleMenu.type == "song"){
+        if(isPlaying && currentSong!=null){
+          currentSong.pause();
+          this.setState({isPlaying:false, currentSong:null});
+        }else{
+          console.log(visibleMenu.song);
+          this.setState({currentSong: visibleMenu.song, isPlaying:true});
+          visibleMenu.song.play();
+          console.log(currentSong);
+          // currentSong.play();
+        }
+      }
+    }
+
+  }
+
 
   componentDidMount() {
     this.setupRotateGesture();
@@ -122,7 +211,6 @@ class App extends React.Component {
           // Counterclockwise rotation
           this.handleRotateCounterclockwise();
         }
-
         // Update prevRotation for the next rotation event
         prevRotation = currentRotation;
       }
@@ -131,8 +219,11 @@ class App extends React.Component {
 
   handleRotateClockwise() {
     const { activeMenuItem } = this.state;
+    if(this.state.visibleMenu==null){
+      return;
+    }
     const options = this.state.visibleMenu.options;
-    if(options.length === 0){
+    if(options == null || options.length === 0){
       return;
     }
     
@@ -153,16 +244,16 @@ class App extends React.Component {
         ...prevState.visibleMenu,
         options: updatedoptions,
       },
-      // visibleOptions : updatedoptions,
     }));
-
-    // this.setState({visibleOptions:updatedoptions});
   }
 
   handleRotateCounterclockwise() {
     const { activeMenuItem } = this.state;
+    if(this.state.visibleMenu==null){
+      return;
+    }
     const options = this.state.visibleMenu.options;
-    if(options.length === 0){
+    if(options == null || options.length === 0){
       return;
     }
     // Calculate the next active menu item index (counterclockwise)
@@ -183,8 +274,6 @@ class App extends React.Component {
         options: updatedoptions,
       },
     }));
-    // this.setState({visibleOptions:updatedoptions});
-
   }
 
   cleanupRotateGesture() {
@@ -204,7 +293,9 @@ class App extends React.Component {
               activeMenuItem={activeMenuItem} 
               wheelRef={this.wheelRef} 
               changeMenu={this.changeMenu}
-              visibleMenu = {visibleMenu}/>
+              visibleMenu = {visibleMenu}
+              playPauseSong = {this.playPauseSong}
+              showMenu={this.showMenu}/>
       </div>
     );
   }
