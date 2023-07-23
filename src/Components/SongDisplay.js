@@ -1,3 +1,5 @@
+
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const SongDisplayContainer = styled.div`
@@ -65,7 +67,35 @@ const ProgressBar = styled.div`
     height: 100%;
 `
 const SongDisplay = (props) =>{
-    const {id, singer, thumbnail, title} = props.visibleMenu;
+    const { visibleMenu } = props;
+    const {id, singer, thumbnail, title} = visibleMenu;
+
+    const [currentTime, setCurrentTime] = useState(0);
+
+    useEffect(() => {
+      const audioElement = visibleMenu?.song;
+      if (audioElement) {
+        // Attach event listener to track timeupdate
+        audioElement.addEventListener("timeupdate", handleTimeUpdate);
+      }
+  
+      return () => {
+        // Clean up the event listener on unmount
+        if (audioElement) {
+          audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+        }
+      };
+    }, [visibleMenu]);
+
+    const handleTimeUpdate = (e) => {
+        const audioElement = e.target;
+        setCurrentTime(audioElement.currentTime);
+    };
+  
+    // Calculate the progress percentage
+    const songDuration = visibleMenu?.song?.duration || 0;
+    const progressPercentage = (currentTime / songDuration) * 100;
+
     return(
             <SongDisplayContainer>
 
@@ -73,7 +103,7 @@ const SongDisplay = (props) =>{
                 <SongName>{title}</SongName>
                 <SingerName>By {singer}.</SingerName>
                 <SongProgressContainer>
-                    <ProgressBar></ProgressBar>
+                    <ProgressBar style={{ width: `${progressPercentage}%` }}></ProgressBar>
                 </SongProgressContainer>
             
             </SongDisplayContainer>
