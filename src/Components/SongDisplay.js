@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
@@ -68,7 +67,7 @@ const ProgressBar = styled.div`
 `
 const SongDisplay = (props) =>{
     const { visibleMenu } = props;
-    const {id, singer, thumbnail, title} = visibleMenu;
+    const {singer, thumbnail, title} = visibleMenu;
 
     const [currentTime, setCurrentTime] = useState(0);
 

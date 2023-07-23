@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import ZingTouch from 'zingtouch';
 
 const ControllerContainer = styled.div`
     height: 50%;

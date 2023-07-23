@@ -11,7 +11,6 @@ const IpodContainer = styled.div`
 `;
 const Ipod = (props)=>{
     const { menu, 
-            activeMenuItem, 
             wheelRef, 
             changeMenu, 
             visibleMenu, 

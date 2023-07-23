@@ -14,9 +14,6 @@ const MenuHeader = styled.div`
     font-size: 1.5rem;
     font-weight: 600;
 `
-// const MenuList = styled.ul`
-    
-// `
 const MenuOption1  = styled.div`
     margin: 10px;
     font-size: 1.5rem;
@@ -38,7 +35,6 @@ const MenuOption2  = styled.div`
 const Menu = (props) =>{
     const {visibleMenu} = props;
     return(
-        // visibleMenu.options.length !== 0 ?
         <MenuContainer>
             <MenuHeader>{visibleMenu.title}</MenuHeader>
             {
@@ -51,7 +47,6 @@ const Menu = (props) =>{
                 })
             }
         </MenuContainer> 
-        // : <UnderDevelopment>{visibleMenu.status}</UnderDevelopment>
     )
 }
 

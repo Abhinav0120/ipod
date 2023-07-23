@@ -1,5 +1,3 @@
-
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const ArtistDisplayContainer = styled.div`
@@ -41,16 +39,9 @@ const SongName = styled.div`
     margin-left: 10px;
     text-transform: capitalize;
 `
-const SingerName = styled.div`
-    color: lightgrey;
-    z-index: 1;
-    margin-left: 10px;
-    font-size: 1.2rem;
-    text-transform: capitalize;
-`
 const ArtistDisplay = (props) =>{
     const { visibleMenu } = props;
-    const {id, singer, thumbnail, title} = visibleMenu;
+    const { thumbnail, title} = visibleMenu;
     return(
             <ArtistDisplayContainer>
 

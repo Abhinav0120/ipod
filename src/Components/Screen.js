@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Menu from "./Menu";
 import SongDisplay from "./SongDisplay";
-import ArtistDisplay from "./ArtistDisplay";
+import ArtistDisplay from "./artistDisplay";
 
 const ScreenContainer = styled.div`
     background-color: grey;
@@ -30,8 +30,7 @@ const UnderDevelopment = styled.div`
 `
 
 const Screen = (props)=>{
-    const {menu, visibleMenu} = props;
-    // const {options, type } = visibleMenu;
+    const {visibleMenu} = props;
     console.log(visibleMenu);
     return(
         <ScreenContainer>

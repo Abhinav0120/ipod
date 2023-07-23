@@ -117,7 +117,7 @@ class App extends React.Component {
       this.wheelRef = React.createRef();
   }
 
-
+  // for changing Menu on the Screen
   changeMenu = () =>{
     const {menu, visibleMenu, menuHistory, currentSong, isPlaying} = this.state;
     if(menuHistory.length === 0){
@@ -135,6 +135,7 @@ class App extends React.Component {
     }
   }
 
+  // For showing menu on the screen
   showMenu = () =>{
     const {menu, menuHistory, currentSong, isPlaying } = this.state;
 
@@ -160,9 +161,9 @@ class App extends React.Component {
         isPlaying: false,
       });
     }
-
   }
 
+  // Play and pause button functionality
   playPauseSong = () =>{
     const {visibleMenu, isPlaying, currentSong} = this.state;
     if(visibleMenu!= null){
@@ -181,6 +182,7 @@ class App extends React.Component {
      }
   }
 
+  // next Song functionality 
   nextSong = () => {
     const { visibleMenu, isPlaying, currentSong } = this.state;
     if (visibleMenu != null) {
@@ -207,6 +209,7 @@ class App extends React.Component {
   };
 
 
+  // prev Song functionality 
   previousSong = () => {
     const { visibleMenu, isPlaying, currentSong } = this.state;
   
@@ -240,6 +243,7 @@ class App extends React.Component {
     this.cleanupRotateGesture();
   }
 
+  // setting up rotate gesture
   setupRotateGesture() {
     const wheelElement = this.wheelRef.current;
     const zingTouchRegion = new ZingTouch.Region(wheelElement);
@@ -267,6 +271,7 @@ class App extends React.Component {
     });
   }
 
+  // for tracking clockwise rotation
   handleRotateClockwise() {
     const { activeMenuItem } = this.state;
     if(this.state.visibleMenu==null){
@@ -279,7 +284,6 @@ class App extends React.Component {
     
     // Calculate the next active menu item index (clockwise)
     let nextActiveItem = (activeMenuItem + 1) % options.length;
-
     this.setState({ activeMenuItem: nextActiveItem });
 
     // Update isSelected for the options
@@ -297,6 +301,7 @@ class App extends React.Component {
     }));
   }
 
+  // for tracking Counterclockwise rotation
   handleRotateCounterclockwise() {
     const { activeMenuItem } = this.state;
     if(this.state.visibleMenu==null){
@@ -308,7 +313,6 @@ class App extends React.Component {
     }
     // Calculate the next active menu item index (counterclockwise)
     let nextActiveItem = (activeMenuItem - 1 + options.length) % options.length;
-
     this.setState({ activeMenuItem: nextActiveItem });
 
     // Update isSelected for the options
