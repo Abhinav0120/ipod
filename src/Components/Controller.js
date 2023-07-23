@@ -12,7 +12,7 @@ const ControllerContainer = styled.div`
 const Wheel = styled.div`
     width: 250px;
     height: 250px;
-    background-color: white;
+    background-color: #ffffff80;
     border-radius: 50%;
     display: flex;
     justify-content:center;
@@ -22,7 +22,7 @@ const Wheel = styled.div`
 const CenterButton = styled.div`
     width: 100px;
     height: 100px;
-    background-color: grey;
+    background-color: #3d3b3ba8;
     border-radius: 50%;
     position: absolute;
     left: 36%;
@@ -57,26 +57,39 @@ const MenuOption = styled.span`
     left: 92px;
     top: 20px;    
 `
-// const handleCenterButtonClick = (e) => {
-//     e.stopPropagation(); // Prevent the event from propagating to parent (Wheel)
-//     // if (onCenterButtonClick) {
-//     //   onCenterButtonClick(); // Call the provided click event handler for the CenterButton
-//     // }
-//   };
 
 const Controller = (props)=>{
-    const {wheelRef, changeMenu, playPauseSong, showMenu} = props;
+    const { wheelRef, 
+            changeMenu, 
+            playPauseSong, 
+            showMenu,
+            nextSong, 
+            previousSong } = props;
     return(
         <ControllerContainer draggable="false">
             <Wheel ref={wheelRef} draggable="false">
-                <PreviousButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" placeholder="Previous Song" role="img"/>
+                <PreviousButton draggable="false" 
+                                src="https://cdn-icons-png.flaticon.com/128/10054/10054759.png" 
+                                placeholder="Previous Song" 
+                                role="img"
+                                onClick={(e)=>{
+                                    e.stopPropagation();
+                                    previousSong()
+                                }}/>
 
                 <MenuOption draggable="false"  onClick={(e)=>{
                     e.stopPropagation();
                     showMenu();
                 }}>Menu</MenuOption>
 
-                <NextButton draggable="false" src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" placeholder="Next Song" role="img"/>
+                <NextButton draggable="false" 
+                            src="https://cdn-icons-png.flaticon.com/128/10054/10054695.png" 
+                            placeholder="Next Song" 
+                            role="img"
+                            onClick={(e)=>{
+                                e.stopPropagation();
+                                nextSong()
+                            }}/>
 
                 <PlayPauseButton onClick={(e)=>{
                     e.stopPropagation();

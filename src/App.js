@@ -2,9 +2,8 @@ import './App.css';
 import React from "react";
 import Ipod from "./Components/Ipod";
 import ZingTouch from 'zingtouch';
-import songs from './assets/songs/songs';
+import songsList from './assets/data/songsList';
 import thumbnails from './assets/thumbnails/thumbnails';
-
 
 class App extends React.Component {
   constructor(){
@@ -20,6 +19,7 @@ class App extends React.Component {
               // isActive:false,
               isSelected: true,
               isVisible: false,
+              imgsource: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bXVzaWMlMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
               status: "This Feature is under development!",
             },
             {
@@ -29,38 +29,7 @@ class App extends React.Component {
                 {
                   id: 1,
                   title:"All Songs",
-                  options: [
-                    {
-                      id: 1,
-                      type: "song",
-                      title:"Justice",
-                      thumbnail: thumbnails.thumbnail1,
-                      singer:"Justin Bieber",
-                      song: new Audio(songs.song1),
-                      isSelected: false,
-                      isVisible: false,
-                    },
-                    {
-                      id: 2,
-                      type: "song",
-                      title:"Lovely",
-                      thumbnail: thumbnails.thumbnail2,
-                      singer:"Billie Eilish",
-                      song: new Audio(songs.song1),
-                      isSelected: false,
-                      isVisible: false,
-                    },
-                    {
-                      id: 3,
-                      type: "song",
-                      title:"Perfect",
-                      thumbnail: thumbnails.thumbnail3,
-                      singer:"Ed Sheeran",
-                      song: new Audio(songs.song1),
-                      isSelected: false,
-                      isVisible: false,
-                    }
-                  ],
+                  options: songsList,
                   isSelected: true,
                   isVisible: false,
                   status: "This Feature is under Development..!",
@@ -69,9 +38,35 @@ class App extends React.Component {
                 {
                   id: 2,
                   title:"Artist",
-                  options: [],
+                  options: [
+                    {
+                      type:"artist",
+                      id: 1,
+                      title:"JustinBieber",
+                      thumbnail: thumbnails.artist1,
+                      isSelected: true,
+                      isVisible: false,
+                    },
+                    {
+                      type:"artist",
+                      id: 2,
+                      title:"Billie Eilish",
+                      thumbnail: thumbnails.artist2,
+                      isSelected: false,
+                      isVisible: false,
+                    },
+                    {
+                      type:"artist",
+                      id: 1,
+                      title:"Ed Sheeran",
+                      thumbnail: thumbnails.artist3,
+                      isSelected: false,
+                      isVisible: false,
+                    },
+                  ],
                   isSelected: false,
                   isVisible: false,
+                  imgsource: "",
                   status: "This Feature is under Development..!",
                 },
                 {
@@ -80,6 +75,7 @@ class App extends React.Component {
                   options: [],
                   isSelected: false,
                   isVisible: false,
+                  imgsource: "https://images.unsplash.com/photo-1609271368026-c91c7886c92e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80",
                   status: "This Feature is under Development..!",
                 }
               ],
@@ -94,6 +90,7 @@ class App extends React.Component {
               // isActive:false,
               isSelected:false,
               isVisible: false,
+              imgsource: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
               status: "This Feature is under Development..!",
             },
             {
@@ -103,6 +100,7 @@ class App extends React.Component {
               // isActive:false,
               isSelected:false,
               isVisible: false,
+              imgsource:"https://icon-library.com/images/settings-icon-ios/settings-icon-ios-8.jpg",
               status: "This Feature is under Development..!",
             }
           ],
@@ -119,8 +117,9 @@ class App extends React.Component {
       this.wheelRef = React.createRef();
   }
 
+
   changeMenu = () =>{
-    const {menu, visibleMenu, menuHistory } = this.state;
+    const {menu, visibleMenu, menuHistory, currentSong, isPlaying} = this.state;
     if(menuHistory.length === 0){
       this.setState({visibleMenu: menu,menuHistory:[...menuHistory, menu]})
     }else if(visibleMenu.options!=null && visibleMenu.options.length !== 0){
@@ -129,6 +128,10 @@ class App extends React.Component {
       console.log(newVisibleMenu);
       this.setState({visibleMenu:newVisibleMenu, menuHistory: [...menuHistory, newVisibleMenu], activeMenuItem:0});
       console.log(this.state.activeMenuItem);
+      if(newVisibleMenu.song!=null){
+        newVisibleMenu.song.play();
+        this.setState({currentSong: newVisibleMenu.song, isPlaying: true});
+      };
     }
   }
 
@@ -160,10 +163,8 @@ class App extends React.Component {
 
   }
 
-  playPauseSong = (song) =>{
-
+  playPauseSong = () =>{
     const {visibleMenu, isPlaying, currentSong} = this.state;
-
     if(visibleMenu!= null){
       if(visibleMenu.type!=null && visibleMenu.type == "song"){
         if(isPlaying && currentSong!=null){
@@ -177,10 +178,59 @@ class App extends React.Component {
           // currentSong.play();
         }
       }
-    }
-
+     }
   }
 
+  nextSong = () => {
+    const { visibleMenu, isPlaying, currentSong } = this.state;
+    if (visibleMenu != null) {
+      if (visibleMenu.type != null && visibleMenu.type === "song") {
+        if (isPlaying && currentSong != null) {
+          currentSong.pause();
+        }
+  
+        const nextId = visibleMenu.id + 1;
+        const nextSongItem = songsList.find((songItem) => songItem.id === nextId);
+  
+        if (nextSongItem) {
+          nextSongItem.song.play();
+          this.setState({ visibleMenu: nextSongItem, isPlaying: true, currentSong: nextSongItem.song });
+        } else {
+          // If nextId is not found, it means the current song is the last one.
+          // So, play the first song in the songsList array.
+          const firstSong = songsList[0];
+          firstSong.song.play();
+          this.setState({ visibleMenu: firstSong, isPlaying: true, currentSong: firstSong.song });
+        }
+      }
+    }
+  };
+
+
+  previousSong = () => {
+    const { visibleMenu, isPlaying, currentSong } = this.state;
+  
+    if (visibleMenu != null) {
+      if (visibleMenu.type != null && visibleMenu.type === "song") {
+        if (isPlaying && currentSong != null) {
+          currentSong.pause();
+        }
+        const nextId = visibleMenu.id - 1;
+        const nextSongItem = songsList.find((songItem) => songItem.id === nextId);
+  
+        if (nextSongItem) {
+          nextSongItem.song.play();
+          this.setState({ visibleMenu: nextSongItem, isPlaying: true, currentSong: nextSongItem.song });
+        } else {
+          // If nextId is not found, it means the current song is the last one.
+          // So, play the first song in the songsList array.
+          const firstSong = songsList[songsList.length-1];
+          firstSong.song.play();
+          this.setState({ visibleMenu: firstSong, isPlaying: true, currentSong: firstSong.song });
+        }
+      }
+    }
+  };
 
   componentDidMount() {
     this.setupRotateGesture();
@@ -280,13 +330,11 @@ class App extends React.Component {
     const wheelElement = this.wheelRef.current;
     const zingTouchRegion = new ZingTouch.Region(wheelElement);
     const rotateGesture = new ZingTouch.Rotate();
-
     zingTouchRegion.unbind(wheelElement, rotateGesture);
   }
 
   render(){
     const {menu, activeMenuItem, visibleMenu} = this.state;
-    // console.log(activeMenuItem);
     return (
       <div className="App">
         <Ipod menu={menu} 
@@ -295,7 +343,9 @@ class App extends React.Component {
               changeMenu={this.changeMenu}
               visibleMenu = {visibleMenu}
               playPauseSong = {this.playPauseSong}
-              showMenu={this.showMenu}/>
+              showMenu={this.showMenu}
+              nextSong={this.nextSong}
+              previousSong={this.previousSong}/>
       </div>
     );
   }

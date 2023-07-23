@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 const MenuContainer = styled.div`
     // background-color: #e0dcdc;
-    background-color: white;
+    background-color: #ffffff42;
     width: 49%;
     height: 99%;
     border-radius: 20px 0px 0px 20px;
     padding: 1%;
+    color: white;
 `
 const MenuHeader = styled.div`
     margin: 10px;
